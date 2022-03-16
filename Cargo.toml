@@ -14,6 +14,7 @@ rust-version = "1.36"
 
 [dependencies]
 serde = { version = "1.0.100", default-features = false }
+serde_path_to_error = "0.1"
 indexmap = { version = "1.5", optional = true }
 itoa = "1.0"
 ryu = "1.0"

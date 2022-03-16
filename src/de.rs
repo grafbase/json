@@ -2409,7 +2409,12 @@ where
     T: de::Deserialize<'de>,
 {
     let mut de = Deserializer::new(read);
-    let value = tri!(de::Deserialize::deserialize(&mut de));
+    let value = tri!(serde_path_to_error::deserialize(&mut de)
+        .map_err(|err| if err.inner().is_syntax() || err.inner().is_data() {
+            serde::de::Error::custom(format!("`{}`: {}", err.path(), err.inner().to_string()))
+        } else {
+            err.into_inner()
+        }));
 
     // Make sure the whole stream has been consumed.
     tri!(de.end());
